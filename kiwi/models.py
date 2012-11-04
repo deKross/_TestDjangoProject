@@ -16,7 +16,11 @@ class Student(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=10)
-    praepostor = models.ForeignKey(Student)
+    praepostor = models.ForeignKey(Student, related_name="group2")
 
     def __unicode__(self):
         return self.name
+
+    def students_count(self):
+        # return Student.objects.filter(group__id=self).count()
+        return self.student_set.count()
