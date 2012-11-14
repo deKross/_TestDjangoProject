@@ -1,0 +1,10 @@
+{% extends "kiwi/base.html" %}
+
+{% block content %}
+<form action="/delete/{{ student.get_link_name }}/"
+      method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Удалить" />
+</form>
+{% endblock content %}

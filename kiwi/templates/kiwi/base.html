@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body %}
+    {% block topbar %}
+    <div id="bar-top">
+    {% if user.is_authenticated %}
+    <span>{{ user }}</span>
+    <span><a href="/logout/">Выйти</a></span>
+    {% else %}
+    <p><a href="/login/">Войти</a><span>|</span><a href="/registration/">Зарегистрироваться</a></p>
+    {% endif %}
+    </div>
+    {% endblock topbar %}
+    {% block content %}
+    {% endblock %}
+{% endblock body %}

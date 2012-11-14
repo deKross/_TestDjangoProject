@@ -1,0 +1,10 @@
+{% extends "kiwi/base.html" %}
+
+{% block content %}
+<form action="/edit/{{ student.get_link_name }}/"
+      method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Сохранить" />
+</form>
+{% endblock content %}
