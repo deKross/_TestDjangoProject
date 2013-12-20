@@ -1,0 +1,35 @@
+{% extends "kiwi/base.html" %}
+{% load studapp %}
+
+{% block content %}
+{% if perms.add_group %}
+<a href="{% url "add_group" %}">Добавить группу</a>
+{% endif %}
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Кол-во человек</th>
+        <th>Староста</th>
+    </tr>
+{% for group in groups %}
+<tr>
+    <td><a href="{{ group.get_absolute_url }}">{{ group.name }}</a></td>
+    <td>{{ group.students_count }}</td>
+    <td>{{ group.praepostor }}</td>
+    {% if perms.kiwi.change_group or perms.kiwi.delete_group %}
+    <td></span>
+        {% if perms.kiwi.change_group %}
+        <span><a href="{% url "change_group" group=group.name %}">Редактировать</a></span>
+        {% endif %}
+        {% if perms.kiwi.delete_group %}
+        <span><a href="{% url "delete_group" group=group.name %}">Удалить</a></span>
+        {% endif %}
+    </span></td>
+    {% endif %}
+    {% if user.is_staff %}
+    <td><span><a href="{% admin_link group %}">admin</a></span></td>
+    {% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

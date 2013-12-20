@@ -4,7 +4,10 @@ import models
 
 
 class StudentAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("last_name", "first_name", "patronymic",
+                     "birth_date", "student_id", "group", "is_praepostor")
+    search_fields = ("last_name", "first_name", "patronymic")
+    date_hierarchy = "birth_date"
 
 
 class StudentInline(admin.TabularInline):
@@ -13,6 +16,8 @@ class StudentInline(admin.TabularInline):
 
 
 class GroupAdmin(admin.ModelAdmin):
+    list_display = ("name", "students_count", "praepostor")
+    search_fields = ["name"]
     inlines = [StudentInline]
 
 

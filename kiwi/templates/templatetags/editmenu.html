@@ -1,0 +1,13 @@
+{% load cycle from future %}
+
+<div class="menu-edit">
+{% cycle "add" "edit" "delete" as action silent %}
+{% cycle "Добавить" "Редактировать" "Удалить" as label silent %}
+{% for perm in object_perms %}
+{% if perm %}
+<span><a href="{{ object_url }}{{ action }}/">{{ label }}{{ suffix }}</a></span>
+{% endif %}
+{% cycle action %}
+{% cycle label %}
+{% endfor %}
+</div>
