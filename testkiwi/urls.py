@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('kiwi.urls')),
+    url(r'', include('kiwi.urls')),
+    url(r'', include('django.contrib.auth.urls'))
     # url(r'', include('debug_toolbar_user_panel.urls')),
 )

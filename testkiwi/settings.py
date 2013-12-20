@@ -1,4 +1,5 @@
 # Django settings for testkiwi project.
+from django.conf import global_settings
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -13,6 +14,19 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.template.TemplateDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'kiwi.authbackends.EmailModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL = '/'
+
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    'kiwi.context_processors.settings_processor',
 )
 
 DEBUG = True
@@ -106,6 +120,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'kiwi.middleware.StatsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -140,6 +155,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'kiwi',
     'debug_toolbar',
+    'devserver',
     # 'debug_toolbar_user_panel',
 )
 
