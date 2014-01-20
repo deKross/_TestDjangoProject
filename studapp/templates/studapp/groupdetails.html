@@ -1,0 +1,48 @@
+{% extends "studapp/base.html" %}
+{% load studapp %}
+
+{% block content %}
+<a href="{% url "group_list" %}">Список групп</a>
+{% if perms.add_student %}
+<a href="{% url "add_student" %}">Добавить студента</a>
+{% endif %}
+{% if perms.delete_group %}
+<a href="{% url "delete_group" group=group.name %}">Удалить группу</a>
+{% endif %}
+<h1>{{ group }} {{ students|length }}</h1>
+<table>
+    <tr>
+        <th>№ студ. билета</th>
+        <th>Ф.И.О.</th>
+        <th>Дата рождения</th>
+    </tr>
+    {% for student in students %}
+    <tr>
+        <td>{{ student.student_id }}</td>
+        {% if student == group.praepostor %}
+        <td><b>{{ student }}</b></td>
+        {% else %}
+        <td>{{ student }}</td>
+        {% endif %}
+        <td>{{ student.birth_date }}</td>
+        {% if perms.studapp.change_student or perms.studapp.delete_student %}
+        <td><span>
+            {% with fn=student.first_name ln=student.last_name p=student.patronymic gn=group.name %}
+            {% if perms.studapp.change_student %}
+            <span><a href="{% url "change_student" group=gn first_name=fn last_name=ln patronymic=p %}"
+                    >Редактировать</a></span>
+            {% endif %}
+            {% if perms.studapp.delete_student %}
+            <span><a href="{% url "delete_student" group=gn first_name=fn last_name=ln patronymic=p %}"
+                    >Удалить</a></span>
+            {% endif %}
+            {% endwith %}
+        </span></td>
+        {% endif %}
+        {% if user.is_staff %}
+        <td><span><a href="{% admin_link student %}">admin</a></span></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,77 @@
+# -*- coding: utf-8 -*-
+from django.contrib.auth.decorators import login_required, permission_required
+from django.core.urlresolvers import reverse
+from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+from django.views import generic
+from studapp.models import Student, Group
+
+
+class GroupsList(generic.ListView):
+    model = Group
+    context_object_name = "groups"
+    template_name = "studapp/groupslist.html"
+
+
+class GroupDetails(generic.ListView):
+    context_object_name = "students"
+    template_name = "studapp/groupdetails.html"
+
+    def get_queryset(self):
+        self.group = get_object_or_404(Group, name=self.kwargs['group'])
+        return self.group.student_set.order_by("last_name", "first_name").all()
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupDetails, self).get_context_data(**kwargs)
+        context["group"] = self.group
+        return context
+
+
+class StudentCreate(generic.CreateView):
+    model = Student
+    template_name = "studapp/studentcreate.html"
+
+    def get_success_url(self):
+        return reverse('group', kwargs={'group': self.object.group.name})
+
+    @method_decorator(permission_required("studapp.create_student"))
+    def dispatch(self, *a, **kw):
+        return super(StudentCreate, self).dispatch(*a, **kw)
+
+
+class StudentUpdate(generic.UpdateView):
+    model = Student
+    context_object_name = "student"
+    template_name = "studapp/studentupdate.html"
+
+    def get_object(self):
+        return get_object_or_404(Student, group__name=self.kwargs['group'],
+                                 first_name=self.kwargs['first_name'],
+                                 last_name=self.kwargs['last_name'],
+                                 patronymic=self.kwargs['patronymic'])
+
+    def get_success_url(self):
+        return reverse('group', kwargs={'group': self.object.group.name})
+
+    @method_decorator(permission_required("studapp.change_student"))
+    def dispatch(self, *a, **kw):
+        return super(StudentUpdate, self).dispatch(*a, **kw)
+
+
+class StudentDelete(generic.DeleteView):
+    model = Student
+    context_object_name = "student"
+    template_name = "studapp/studentdelete.html"
+
+    def get_object(self):
+        return get_object_or_404(Student, group__name=self.kwargs['group'],
+                                 first_name=self.kwargs['first_name'],
+                                 last_name=self.kwargs['last_name'],
+                                 patronymic=self.kwargs['patronymic'])
+
+    def get_success_url(self):
+        return reverse('group', kwargs={'group': self.object.group.name})
+
+    @method_decorator(permission_required("studapp.delete_student"))
+    def dispatch(self, *a, **kw):
+        return super(StudentDelete, self).dispatch(*a, **kw)

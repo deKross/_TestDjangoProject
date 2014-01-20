@@ -1,0 +1,27 @@
+{% extends "studapp/base.html" %}
+{% load studapp %}
+
+{% block content %}
+{% for entry in entries %}
+<p>
+    <span>{{ entry.action_flag }}</span>
+    <span>{{ entry.action_time }}</span>
+    <span>{{ entry.commiter }}</span>
+    </br><span>{{ entry.object_repr }}</span>
+    {% if entry.data %}
+    <p>
+        {% for item in entry.data %}
+        <span>{{ item.field }}</span><span>: </span>
+        {% if entry.action.addition %}
+        <span>{{ item.value }}</span>
+        {% else %}
+        <span>{{ item.old }}</span><span> -> </span><span>{{ item.new }}</span>
+        {% endif %}
+        </br>
+        {% endfor %}
+    </p>
+    {% if not forloop.last %}<hr>{% endif %}
+    {% endif %}
+</p>
+{% endfor %}
+{% endblock content %}
