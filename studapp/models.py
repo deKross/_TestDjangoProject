@@ -52,7 +52,6 @@ class Group(models.Model):
         return reverse('group', args=[self.name])
 
     def students_count(self):
-        # return Student.objects.filter(group__id=self).count()
         return self.student_set.count()
     students_count.short_description = 'Кол-во студентов'
 

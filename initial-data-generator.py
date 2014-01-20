@@ -5,7 +5,7 @@ import codecs
 import random
 
 
-APP_NAME = "kiwi"
+APP_NAME = "studapp"
 
 
 data = None
