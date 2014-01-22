@@ -4,7 +4,7 @@
 {% block content %}
 {% for entry in entries %}
 <p>
-    <span>{{ entry.action_flag }}</span>
+    <span>{{ "Добавлено | Изменено | Удалено"|getel:entry.action_flag }}</span>
     <span>{{ entry.action_time }}</span>
     <span>{{ entry.commiter }}</span>
     </br><span>{{ entry.object_repr }}</span>
@@ -20,8 +20,8 @@
         </br>
         {% endfor %}
     </p>
-    {% if not forloop.last %}<hr>{% endif %}
     {% endif %}
+    {% if not forloop.last %}<hr>{% endif %}
 </p>
 {% endfor %}
 {% endblock content %}

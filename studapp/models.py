@@ -11,9 +11,9 @@ from django.contrib.contenttypes.generic import GenericForeignKey
 from django.conf import settings
 
 
-ADDITION = 1
-CHANGE = 2
-DELETION = 3
+ADDITION = 0
+CHANGE = 1
+DELETION = 2
 
 
 class Student(models.Model):

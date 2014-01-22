@@ -23,14 +23,16 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_REDIRECT_URL = '/'
 
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+
+LOGOUT_URL = '/logout/'
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'studapp.context_processors.settings_processor',
 )
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = True
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from collections import namedtuple
 
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.db.models import Count
 from django.contrib.auth import get_permission_codename
 from django.contrib.auth.decorators import login_required
@@ -31,7 +31,7 @@ class Log(generic.ListView):
         for item in qs:
             item.commiter = '[system]' if item.user is None else item.user
             f = [False] * 3
-            f[item.action_flag - 1] = True
+            f[item.action_flag] = True
             item.action = Log.ActionFlag(*f)
             if item.action_flag == DELETION or not item.data:
                 continue
@@ -49,8 +49,9 @@ class Log(generic.ListView):
             item.data = data
         return qs
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff():
+        if not request.user.is_staff:
             raise PermissionDenied
         return super(Log, self).dispatch(request, *args, **kwargs)
 
@@ -98,7 +99,9 @@ class EditMixin(object):
             return 'change'
         elif isinstance(self, BaseDeleteView):
             return 'delete'
-        # TODO: Must raise some exception
+        raise ImproperlyConfigured(
+                "%s should inherit from "
+                "Base<Create|Update|Delete>View." % self.__class__.__name__)
 
     def _get_permission(self):
         if hasattr(self, '_permission'):
@@ -135,9 +138,10 @@ class EditMixin(object):
         return names
 
     def form_valid(self, form):
-        result = super(EditMixin, self).form_valid(form)
+        self.object = form.save(commit=False)
         self.object._commiter = self.request.user
-        return result
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
