@@ -3,6 +3,9 @@ from django.conf import global_settings
 
 INTERNAL_IPS = ('127.0.0.1',)
 
+DEBUG = True
+TEMPLATE_DEBUG = True
+
 DEBUG_TOOLBAR_PANELS = (
     # 'debug_toolbar_user_panel.panels.UserPanel'
     'debug_toolbar.panels.version.VersionDebugPanel',
@@ -30,9 +33,6 @@ LOGOUT_URL = '/logout/'
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'studapp.context_processors.settings_processor',
 )
-
-DEBUG = True
-TEMPLATE_DEBUG = True
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -130,7 +130,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'studproj.urls'
@@ -156,9 +156,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'studapp',
-    'debug_toolbar',
-    'devserver',
-    # 'debug_toolbar_user_panel',
+    #'debug_toolbar',
+    #'devserver',
 )
 
 # A sample logging configuration. The only tangible logging
