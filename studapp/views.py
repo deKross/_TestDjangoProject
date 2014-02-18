@@ -137,6 +137,13 @@ class EditMixin(object):
         names.append(name)
         return names
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object._commiter = self.request.user
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object._commiter = self.request.user
